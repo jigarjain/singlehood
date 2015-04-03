@@ -1,0 +1,48 @@
+<div class="page-dashboard">
+<br><br>
+<div class="table-container">
+    <div class="row">
+        <div class="input-field col s6">
+            <i class="mdi-action-search prefix"></i>
+            <input id="icon_prefix" type="text" class="filter" placeholder="Filter by name">
+            <label for="icon_prefix"></label>
+        </div>
+    </div>
+    <table class="footable" data-filter=".filter" data-page-navigation=".pagination" data-page-size="10">
+        <thead>
+            <tr>
+                <th data-sort-ignore="true">#</th>
+                <th data-sort-ignore="true">Type</th>
+                <th width="50%">Name</th>
+                <th>Last Modified</th>
+                <th>Last Viewed</th>
+                <th data-sort-ignore="true">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each files}}
+                <tr>
+                    <td>{{{plusOne @index}}}</td>
+                    <td class="icon"><img src="{{{serviceIcon source}}}"></td>
+                    <td>{{fileMeta.title}}</td>
+                    <td>{{{ renderDate fileMeta.modifiedDate 'hh:mm tt MMM dS, yy'}}}</td>
+                    <td>{{{ renderDate fileMeta.markedViewedByMeDate 'hh:mm tt MMM dS, yy'}}}</td>
+                    <td class="action">
+                        <a href="{{fileMeta.alternateLink}}" target="_blank"><i class="fa fa-eye"></i></a>
+                        &nbsp;&nbsp;
+                        <a href="#" class="deleteFile" data-file="{{_id}}"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>
+            {{/each}}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5">
+                    <ul class="pagination"></ul>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+</div>

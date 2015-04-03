@@ -1,7 +1,10 @@
 var _ = require('lodash');
 var modules = [
+    'services',
     'mixins',
-    'users'
+    'users',
+    'file',
+    'sync',
 ];
 
 function init(cfg) {

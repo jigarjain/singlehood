@@ -8,14 +8,11 @@ var app        = require('./common'),
     compress   = require('compression'),
     _          = require('lodash');
 
-// Set response handler
-app.set('responseHandler', sendWebReponse);
-
 // Use gzip compression
 app.use(compress());
 
 // serve static files
-app.use('/static', express.static('/io/static/'));
+app.use('/static', express.static(app.get('config').paths.static));
 
 
 // Use session
@@ -90,28 +87,30 @@ app.use(function (err, req, res, next) {
         return next();
     }
 
+    console.log(err.stack);
+
     if (err.status === 401) {
-        return res.redirect('/login?' + qs.stringify({
+        return res.redirect('/?' + qs.stringify({
             'r': req.originalUrl
         }));
     }
 
     if (err.status === 403) {
         res.status(403);
-        return res.render('403', {
+        return res.render('errors/403', {
             'title': 'This page is forbidden'
         });
     }
 
     if (err.status === 400) {
         res.status(400);
-        return res.render('400', {
+        return res.render('errors/400', {
             'title': 'Bad data'
         });
     }
 
     res.status(500);
-    res.render('500', {
+    res.render('errors/500', {
         'title': 'Something went wronng'
     });
 });
@@ -119,19 +118,11 @@ app.use(function (err, req, res, next) {
 // register 404
 app.use(function (req, res) {
     res.status(404);
-    res.render('404', {
+    res.render('errors/404', {
         'title': 'Page not found'
     });
 });
 
-// Send web response
-function sendWebReponse(req, res) {
-    if (req.query.format === 'json') {
-        return res.jsonp(res.api);
-    }
-
-    res.renderOld.apply(res.renderData.ctx, res.renderData.args);
-}
 
 app.listen(app.get('config').web.port);
 console.log('Listening on port: ', app.get('config').web.port);

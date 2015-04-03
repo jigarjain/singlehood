@@ -2,13 +2,22 @@
  * @module  google.drive
  */
 
-module.exports = function () {
+module.exports = function (cfg) {
     var google = require('googleapis');
+    var _      = require('lodash');
+    var OAuth2 = google.auth.OAuth2;
+
+    var auth = new OAuth2(
+            cfg.google.clientId,
+            cfg.google.clientSecret,
+            cfg.baseurl + cfg.google.callbackUrl
+        );
 
     /**
      * @class Drive
      */
-    function Drive(auth) {
+    function Drive(token) {
+        auth.credentials = token;
 
         /** @type {Object} Initialized instance of google.Drive() */
         this.drive = google.drive({
@@ -38,12 +47,18 @@ module.exports = function () {
          *
          */
         'getAllFiles': function (params) {
+            var that = this;
             if (typeof params === 'undefined') {
                 params = {};
             }
 
+            params = _.extend(params, {
+                'corpus'  : 'DOMAIN',
+                'trashed' : 'false'
+            });
+
             return new Promise(function (resolve, reject) {
-                this.drive.files.list(params, function (err, res) {
+                that.drive.files.list(params, function (err, res) {
                     if (err) {
                         return reject (err);
                     }
@@ -197,12 +212,13 @@ module.exports = function () {
          *   }
          */
         'getFile': function (fileId) {
+            var that = this;
             var params = {
                 'fileId': fileId
             };
 
             return new Promise(function (resolve, reject) {
-                this.drive.files.get(params, function (err, res) {
+                that.drive.files.get(params, function (err, res) {
                     if (err) {
                         return reject (err);
                     }
@@ -356,12 +372,13 @@ module.exports = function () {
          *   }
          */
         'trashFile': function (fileId) {
+            var that = this;
             var params = {
                 'fileId': fileId
             };
 
             return new Promise(function (resolve, reject) {
-                this.drive.files.trash(params, function (err, res) {
+                that.drive.files.trash(params, function (err, res) {
                     if (err) {
                         return reject (err);
                     }

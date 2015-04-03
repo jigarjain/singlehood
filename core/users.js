@@ -18,25 +18,6 @@ module.exports = function (cfg, db) {
     function User() {
         Contact.call(this);
         Storable.call(this);
-        this._password = null;
-
-        /**
-         * The user's access level in the system. Options:
-         * - admin
-         * - user
-         *
-         * @property role
-         * @type {String}
-         * @default 'user'
-         */
-        this.role = 'user';
-
-        /**
-         * @property emailVerified
-         * @type {Boolean}
-         * @default false
-         */
-        this.emailVerified = false;
 
         /**
          * Contains associated oauth accounts.
@@ -83,18 +64,7 @@ module.exports = function (cfg, db) {
          * @property tokenExpiry
          * @type {Date}
          */
-        this._tokenExpiry  = null;
-
-        Object.defineProperties(this, {
-            'tokenExpiry': {
-                'set': function (time) {
-                    this._tokenExpiry = time.getTime();
-                },
-                'get': function () {
-                    return new Date(this._tokenExpiry);
-                }
-            }
-        });
+        this.tokenExpiry  = null;
     }
 
     /**

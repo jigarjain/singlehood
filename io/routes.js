@@ -1,3 +1,6 @@
 module.exports = function (app) {
-    app.use('/'        , require('./handlers/home'));
+    app.use('/', require('./handlers/app'));
+    app.use('/login', require('./handlers/login'));
+    app.use('/dashboard', require('./handlers/dashboard'));
+    app.use('/files', require('./handlers/files'));
 };

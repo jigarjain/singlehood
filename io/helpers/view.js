@@ -3,6 +3,8 @@ url     = require('url'),
 version = require('../../package.json').version,
 _req, _res;
 
+require('datejs');
+
 function renderFlashMsg() {
     var flash = _req.flash();
     var out = '';
@@ -11,7 +13,6 @@ function renderFlashMsg() {
     _.each(types, function (type) {
         if (flash[type]) {
             out += '<div class="flash-msgs '+ type +'">';
-            out += '<h2>' + type + '</h2>';
             out += '<ul>';
 
             _.each(flash[type], function (msg) {
@@ -110,40 +111,6 @@ function renderJSTags(jstags) {
     return out;
 }
 
-function renderAdminFlash() {
-    var flash = _req.flash();
-    var out = '';
-    var classnames = {
-        'error': 'danger',
-        'success': 'success',
-        'info': 'info'
-    };
-
-    _.each(['error', 'success', 'info'], function (type) {
-        if (flash[type]) {
-            out += '<div class="alert alert-' +
-                (classnames[type] ? classnames[type] : type) +
-                ' alert-dismissable">' +
-                '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>';
-
-            if (flash[type].length === 1) {
-                out += flash[type][0];
-            } else {
-                out +=
-                '<ul>' +
-                _.reduce(flash[type], function (str, msg) {
-                    return str + '<li>' + msg + '</li>';
-                }, '') +
-                '</ul>';
-            }
-
-            out += '</div>';
-        }
-    });
-
-    return out;
-}
-
 function objToKeyval(obj) {
     return _.collect(obj, function (val, key) {
         return {'key': key, 'val': val};
@@ -178,6 +145,19 @@ function plusOne(val) {
     return parseInt(val) + 1;
 }
 
+function serviceIcon(type) {
+    switch(type) {
+        case 'gdrive':
+            return '/static/img/gdrive.png';
+        default:
+            return '';
+    }
+}
+
+function renderDate(date, format) {
+    return new Date(date).toString(format);
+}
+
 module.exports = {
     'setContext': function (req, res, next) {
         _req = req;
@@ -188,8 +168,9 @@ module.exports = {
         'renderCSSTags'       : renderCSSTags,
         'renderJSTags'        : renderJSTags,
         'renderFlashMsg'      : renderFlashMsg,
-        'renderAdminFlash'    : renderAdminFlash,
         'plusOne'             : plusOne,
-        'eachReverse'         : eachReverse
+        'eachReverse'         : eachReverse,
+        'serviceIcon'         : serviceIcon,
+        'renderDate'          : renderDate,
     }
 };

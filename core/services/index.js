@@ -2,8 +2,7 @@ module.exports = function (cfg, db) {
     var _ = require('lodash');
 
     var services = [
-        'gdrive',
-        'paypal'
+        'google'
     ];
 
     var expose = {};

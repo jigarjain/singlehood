@@ -1,13 +1,18 @@
 /**
- * @module File
+ * @module file
  */
 
 module.exports = function (cfg, db) {
     var _        = require('lodash'),
-        mixins   = require('../mixins')(cfg, db),
+        mixins   = require('./mixins')(cfg, db),
         Storable = mixins.Storable,
         coll     = db.collection('files');
 
+    /**
+     * @constructor
+     * @class file.File
+     * @uses mixins.Storable
+     */
     function File () {
         Storable.call(this);
 
@@ -37,22 +42,55 @@ module.exports = function (cfg, db) {
 
     File.prototype = _.extend({}, Storable.prototype);
 
+    /**
+     * @constructor
+     * @class file.Repo
+     */
     function Repo () {}
 
+    /**
+     * Add a file to db
+     *
+     * @static
+     * @method add
+     * @for    file.Repo
+     * @param  {file.File} file
+     * @return {Promise}   Inserted doc id
+     */
     Repo.add = function (file) {
-        return new Promise(function (resolve, reject) {
-            file.touch();
-            coll.insert(file, function (err, doc) {
-                if (err) {
-                    return reject(err);
-                }
+        var source = 'gdrive';
+        var id     = file.fileMeta.id;
 
-                file._id = doc._id;
-                resolve(file._id);
+        return Repo.getBySourceId(source, id)
+            .then(function (res) {
+                if (res) {
+                    return Repo.update(file);
+                } else {
+                    return new Promise(function (resolve, reject) {
+                        file.touch();
+                        coll.insert(file, function (err, doc) {
+                            if (err) {
+                                return reject(err);
+                            }
+
+                            file._id = doc._id;
+                            resolve(file._id);
+                        });
+                    });
+                }
             });
-        });
+
     };
 
+    /**
+     * Update an file in db
+     *
+     * @static
+     * @method update
+     * @for    file.Repo
+     * @param  {file.File} event
+     * @return {Promise}      Boolean acknowledgment
+     */
     Repo.update = function (file) {
         return new Promise(function (resolve, reject) {
             file.touch();
@@ -66,5 +104,110 @@ module.exports = function (cfg, db) {
                 resolve(true);
             });
         });
+    };
+
+    /**
+     * Gets all file of a user
+     *
+     * @static
+     * @method getByUserId
+     * @for    file.Repo
+     * @param  {Object} User Id
+     * @return {Promise} {{#crossLink "file.File"}}file{{/crossLink}}
+     */
+    Repo.getByUserId = function (userId) {
+        return new Promise(function (resolve, reject) {
+            coll.find({
+                'userId': userId
+            }, function (err, docs) {
+                if (err) {
+                    reject(err);
+                }
+
+                var files = docs ? docs.map(function (doc) {
+                    return _.create(new File(), doc);
+                }) : [];
+
+                resolve(files);
+            });
+        });
+    };
+
+    /**
+     * Gets a file by id
+     *
+     * @static
+     * @method getById
+     * @for    file.Repo
+     * @param  {Object} FileId
+     * @return {Promise} {{#crossLink "file.File"}}file{{/crossLink}}
+     */
+    Repo.getById = function (id) {
+        return new Promise(function (resolve, reject) {
+            coll.findOne({
+                '_id': id
+            }, function (err, doc) {
+                if (err) {
+                    reject(err);
+                }
+
+                resolve(doc ? _.create(new File(), doc) : null);
+            });
+        });
+    };
+
+    /**
+     * Gets a file by id
+     *
+     * @static
+     * @method getById
+     * @for    file.Repo
+     * @param  {Object} FileId
+     * @return {Promise} {{#crossLink "file.File"}}file{{/crossLink}}
+     */
+    Repo.getBySourceId = function (src, id) {
+        return new Promise(function (resolve, reject) {
+            var searchParam = {
+                'source': 'gdrive',
+                'fileMeta.id': id
+            };
+
+            coll.findOne(searchParam, function (err, doc) {
+                if (err) {
+                    reject(err);
+                }
+
+                resolve(doc ? _.create(new File(), doc) : null);
+            });
+        });
+    };
+
+
+    /**
+     * Delete a file
+     *
+     * @static
+     * @method delete
+     * @for    file.Repo
+     * @param  {Object} File Id
+     * @return {Promise} Boolean acknowledgement
+     */
+    Repo.delete = function (id) {
+        return new Promise(function (resolve, reject) {
+            coll.find({
+                '_id': id
+            }, function (err) {
+                if (err) {
+                    reject(err);
+                }
+
+                resolve(true);
+            });
+        });
+    };
+
+    return {
+        'File': File,
+        'Repo': Repo
     };
 };

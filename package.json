@@ -15,6 +15,7 @@
     "compression": "^1.4.3",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^0.4.1",
+    "datejs": "^1.0.0-rc3",
     "express": "^4.4.5",
     "express-handlebars": "^1.0.1",
     "express-session": "^1.6.1",
@@ -35,7 +36,7 @@
     "passport-google-oauth": "~0.1.5",
     "passport-local": "^1.0.0",
     "qs": "^0.6.6",
-    "request": "~2.40.0",
+    "request": "^2.40.0",
     "validator": "^3.16.0"
   },
   "devDependencies": {

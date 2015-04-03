@@ -9,7 +9,7 @@ module.exports = function (cfg) {
     var auth = new OAuth2(
             cfg.google.clientId,
             cfg.google.clientSecret,
-            cfg.google.callbackUrl
+            cfg.baseurl + cfg.google.callbackUrl
         );
 
     function OAuth() {}
@@ -20,7 +20,10 @@ module.exports = function (cfg) {
      * @return {[type]} [description]
      */
     OAuth.getAuthUrl = function () {
-        return auth.generateAuthUrl({ scope: cfg.google.scope });
+        return auth.generateAuthUrl({
+            'access_type' : 'offline',
+            'scope'       : cfg.google.scope
+        });
     };
 
     /**
@@ -43,6 +46,6 @@ module.exports = function (cfg) {
     };
 
     return {
-        'Oauth': OAuth
+        'OAuth': OAuth
     };
 };
