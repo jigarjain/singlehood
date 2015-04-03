@@ -1,0 +1,6 @@
+*
+!production.js
+!staging.js
+!development.js
+!index.js
+!.gitignore

@@ -1,0 +1,6 @@
+{
+	"preset": "wikimedia",
+
+	"requireSpacesInsideArrayBrackets": null,
+	"validateIndentation": 4
+}

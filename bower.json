@@ -1,0 +1,21 @@
+{
+  "name": "singlehood",
+  "version": "1.0.0",
+  "authors": [
+    "Jigar Jain <jigar@grallo.com>"
+  ],
+  "description": "All under single hood",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "static/thirdparty/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "materialize": "~0.96.0"
+  }
+}
