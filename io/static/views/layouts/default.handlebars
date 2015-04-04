@@ -7,8 +7,7 @@
 <head>
     <meta charset="utf-8" />
     <title>{{title}}</title>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.96.0/css/materialize.min.css">
+    <link rel="stylesheet" href="/static/thirdparty/fontawesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="/static/css/app.css">
 
   <!-- Compiled and minified JavaScript -->
@@ -19,6 +18,8 @@
         <a href="/" class="site-title"><i class="fa fa-umbrella"></i> singlehood</a>
         <ul class="nav-links">
             {{#if user}}
+                <li><a href="/dashboard">Drive</a></li>
+                <li><a href="/services/dropbox">Dropbox</a></li>
                 <li><a href="/logout">Logout</a></li>
             {{/if}}
         </ul>

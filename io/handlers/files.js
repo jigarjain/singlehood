@@ -1,3 +1,4 @@
+/* jshint camelcase: false */
 var express   = require('express'),
     wrap      = require('co-express'),
     router    = express.Router();
@@ -17,7 +18,6 @@ router.post('/:id/delete/', wrap(function* (req, res, next) {
 
         var fileId = req.app.get('sh').db.ObjectId(req.params.id);
         var userId = req.app.get('sh').db.ObjectId(req.user._id);
-        console.log();
 
         // Get all user files
         var file = yield req.app.get('sh').file.Repo.getById(fileId);
@@ -38,6 +38,10 @@ router.post('/:id/delete/', wrap(function* (req, res, next) {
         if (file.source === 'gdrive') {
             var drive = new (req.app.get('sh')).services.google.Drive(req.user.oauths.google);
             yield drive.trashFile(file.fileMeta.id);
+        } else {
+            console.log(req.user.oauths.dropbox);
+            var dropbox = new (req.app.get('sh')).services.dropbox.Client(req.user.oauths.dropbox.access_token);
+            yield dropbox.trashFile(file.fileMeta.path);
         }
 
         // Delete the file from local

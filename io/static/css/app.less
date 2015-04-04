@@ -1,4 +1,6 @@
-@primary-color: #ff5252;
+@import (inline) '../thirdparty/materialize/dist/css/materialize.min.css';
+
+@primary-color: #EFC982;
 body, p {
     font-family: 'Source Sans Pro', sans-serif;
 }
@@ -62,16 +64,23 @@ header {
 
     .google-btn {
         margin-top: 30px;
+        padding: 0 30px;
+        background-color: #D33323;
 
         i {
+            position: relative;
             display: inline-block;
             margin-right: 15px;
         }
 
         span {
+            margin-top: -10px;
             display: inline-block;
+            vertical-align: middle;
         }
     }
+
+
 }
 
 .page-dashboard {
@@ -82,5 +91,34 @@ header {
         .icon img{
             width: 16px;
         }
+    }
+
+    .dropbox-btn {
+        display: table;
+        margin: 100px auto;
+        padding: 0 30px;
+        background-color: #1081DE;
+
+        i {
+            position: relative;
+            display: inline-block;
+            margin-right: 15px;
+        }
+
+        span {
+            margin-top: -5px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+    }
+}
+
+.page-error {
+    text-align: center;
+    padding: 75px;
+    color: darken(@primary-color, 15%);
+
+    i {
+        font-size: 70px;
     }
 }

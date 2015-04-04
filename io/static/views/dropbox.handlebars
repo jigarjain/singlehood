@@ -1,5 +1,10 @@
 <div class="page-dashboard">
 <br><br>
+{{#if dropboxAuthURL}}
+    <div class="text-center">
+        <a href="{{dropboxAuthURL}}" class="waves-effect waves-light btn-large dropbox-btn"><i class="fa fa-dropbox"></i><span>Connect your dropbox</span></a>
+    </div>
+{{else}}
 <div class="table-container">
     <div class="row">
         <div class="input-field col s6">
@@ -8,6 +13,7 @@
             <label for="icon_prefix"></label>
         </div>
     </div>
+    {{#if files.length}}
     <table class="footable" data-filter=".filter" data-page-navigation=".pagination" data-page-size="10">
         <thead>
             <tr>
@@ -15,7 +21,7 @@
                 <th data-sort-ignore="true">Type</th>
                 <th width="50%">Name</th>
                 <th>Last Modified</th>
-                <th>Last Viewed</th>
+                <th>Size</th>
                 <th data-sort-ignore="true">Action</th>
             </tr>
         </thead>
@@ -24,13 +30,11 @@
                 <tr>
                     <td>{{{plusOne @index}}}</td>
                     <td class="icon"><img src="{{{serviceIcon source}}}"></td>
-                    <td>{{fileMeta.title}}</td>
-                    <td>{{{ renderDate fileMeta.modifiedDate 'hh:mm tt MMM dS, yy'}}}</td>
-                    <td>{{{ renderDate fileMeta.markedViewedByMeDate 'hh:mm tt MMM dS, yy'}}}</td>
+                    <td>{{fileMeta.path}}</td>
+                    <td>{{{ renderDate fileMeta.modified 'hh:mm tt MMM dS, yy'}}}</td>
+                    <td>{{fileMeta.size}}</td>
                     <td class="action">
-                        <a href="{{fileMeta.alternateLink}}" target="_blank"><i class="fa fa-eye"></i></a>
-                        &nbsp;&nbsp;
-                        <!-- <a href="#" class="deleteFile" data-file="{{_id}}"><i class="fa fa-trash"></i></a> -->
+                        <a href="#" class="deleteFile" data-file="{{_id}}"><i class="fa fa-trash"></i></a>
                     </td>
                 </tr>
             {{/each}}
@@ -43,6 +47,9 @@
             </tr>
         </tfoot>
     </table>
+    {{else}}
+        <p>Files will be syncd &amp; displayed shortly</p>
+    {{/if}}
 </div>
-
+{{/if}}
 </div>

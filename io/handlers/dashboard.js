@@ -14,7 +14,7 @@ router.get('/', wrap(function* (req, res, next) {
         var userId = req.app.get('sh').db.ObjectId(req.user._id);
 
         // Get all user files
-        var files = yield req.app.get('sh').file.Repo.getByUserId(userId);
+        var files = yield req.app.get('sh').file.Repo.getByUserId(userId, 'gdrive');
 
         files = _.filter(files, function (f) {
             return f.fileMeta.parents.length > 0;

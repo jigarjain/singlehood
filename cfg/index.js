@@ -27,13 +27,14 @@ var cfg = {
             'https://www.googleapis.com/auth/userinfo.profile',
             'https://www.googleapis.com/auth/userinfo.email',
             'https://www.googleapis.com/auth/drive'
-        ],
-        'gtmCode'      : 'GTM-NMGKSQ',
-        'urlShortenKey': '',
-        'maps': {
-            'key': process.env.GMAPS_KEY
-        }
+        ]
     },
+    'dropbox': {
+        'appKey'      : 'iq7e4ucco5y6ust',
+        'appSecret'   : 'c565erpm7v07ay0',
+        'callbackUrl' : '/services/dropbox/callback',
+        'root'        : 'dropbox'
+    }
 };
 
 var env = process.env.NODE_ENV;

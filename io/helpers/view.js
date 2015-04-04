@@ -149,6 +149,8 @@ function serviceIcon(type) {
     switch(type) {
         case 'gdrive':
             return '/static/img/gdrive.png';
+        case 'dropbox':
+            return '/static/img/dropbox.png';
         default:
             return '';
     }

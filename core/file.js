@@ -58,10 +58,17 @@ module.exports = function (cfg, db) {
      * @return {Promise}   Inserted doc id
      */
     Repo.add = function (file) {
-        var source = 'gdrive';
-        var id     = file.fileMeta.id;
+        var source, key;
+        if (file.source === 'gdrive') {
+            source = 'gdrive';
+            key     = file.fileMeta.id;
+        } else {
+            source = 'dropbox';
+            key     = file.fileMeta.path;
+        }
 
-        return Repo.getBySourceId(source, id)
+
+        return Repo.getBySourceKey(source, key)
             .then(function (res) {
                 if (res) {
                     return Repo.update(file);
@@ -115,11 +122,16 @@ module.exports = function (cfg, db) {
      * @param  {Object} User Id
      * @return {Promise} {{#crossLink "file.File"}}file{{/crossLink}}
      */
-    Repo.getByUserId = function (userId) {
+    Repo.getByUserId = function (userId, source) {
+        var searchParam = {};
+        searchParam.userId = userId;
+
+        if (source) {
+            searchParam.source = source;
+        }
+
         return new Promise(function (resolve, reject) {
-            coll.find({
-                'userId': userId
-            }, function (err, docs) {
+            coll.find(searchParam, function (err, docs) {
                 if (err) {
                     reject(err);
                 }
@@ -165,12 +177,20 @@ module.exports = function (cfg, db) {
      * @param  {Object} FileId
      * @return {Promise} {{#crossLink "file.File"}}file{{/crossLink}}
      */
-    Repo.getBySourceId = function (src, id) {
+    Repo.getBySourceKey = function (src, key) {
         return new Promise(function (resolve, reject) {
-            var searchParam = {
-                'source': 'gdrive',
-                'fileMeta.id': id
-            };
+            var searchParam;
+            if (src === 'gdrive') {
+                searchParam = {
+                    'source': 'gdrive',
+                    'fileMeta.id': key
+                };
+            } else {
+                searchParam = {
+                    'source': 'dropbox',
+                    'fileMeta.path': key
+                };
+            }
 
             coll.findOne(searchParam, function (err, doc) {
                 if (err) {
@@ -194,7 +214,7 @@ module.exports = function (cfg, db) {
      */
     Repo.delete = function (id) {
         return new Promise(function (resolve, reject) {
-            coll.find({
+            coll.remove({
                 '_id': id
             }, function (err) {
                 if (err) {
