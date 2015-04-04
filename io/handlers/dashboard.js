@@ -32,6 +32,9 @@ router.get('/', wrap(function* (req, res, next) {
         };
 
         res.render('dashboard', pageData);
+
+        // Start  Dropbox syncing
+        req.app.get('sh').sync.GDrive(userId);
     } catch (e) {
         return next(e);
     }

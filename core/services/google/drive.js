@@ -386,6 +386,30 @@ module.exports = function (cfg) {
                     resolve(res);
                 });
             });
+        },
+
+        'uploadFile': function (title, content, mime) {
+            var that = this;
+            var params = {
+                resource: {
+                    title: title,
+                    mimeType: mime
+                },
+                media: {
+                    mimeType: mime,
+                    body: content
+                }
+            };
+
+            return new Promise(function (resolve, reject) {
+                that.drive.files.insert(params, function (err, res) {
+                    if (err) {
+                        return reject(err);
+                    }
+
+                    resolve(res);
+                });
+            });
         }
     };
 

@@ -4,6 +4,8 @@ $(document).ready(function () {
         $('.footable').footable();
     }
 
+    $('.modal-trigger').leanModal();
+
     // Delete File
     $(document).on('click', '.deleteFile', function () {
         var fileId = $(this).data('file'),

@@ -12,6 +12,9 @@
             <input id="icon_prefix" type="text" class="filter" placeholder="Filter by name">
             <label for="icon_prefix"></label>
         </div>
+        <div class="col s6 right-align">
+            <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" href="#uploadModal"><i class="mdi-content-add"></i></a>
+        </div>
     </div>
     {{#if files.length}}
     <table class="footable" data-filter=".filter" data-page-navigation=".pagination" data-page-size="10">
@@ -52,4 +55,22 @@
     {{/if}}
 </div>
 {{/if}}
+<div id="uploadModal" class="modal">
+    <form method="post" action="/files/upload" enctype='multipart/form-data'>
+        <div class="modal-content">
+          <h4>Upload a File</h4>
+            <input type="hidden" name="source" value="dropbox">
+            <div class="file-field input-field">
+                <input class="file-path validate" type="text"/>
+                <div class="btn">
+                    <span>File</span>
+                    <input type="file" name="file" />
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="modal-action modal-close waves-effect waves-green btn-flat">Upload</button>
+        </div>
+    </form>
+</div>
 </div>

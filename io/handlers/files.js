@@ -1,6 +1,7 @@
 /* jshint camelcase: false */
 var express   = require('express'),
     wrap      = require('co-express'),
+    fs        = require('fs'),
     router    = express.Router();
 
 router.post('/:id/delete/', wrap(function* (req, res, next) {
@@ -62,5 +63,32 @@ router.post('/:id/delete/', wrap(function* (req, res, next) {
         return next(e);
     }
 }));
+
+router.post('/upload', function (req, res, next) {
+    try {
+        if ('file' in req.files) {
+            var title = req.files.file.originalname;
+            var mime = req.files.file.mimetype;
+
+            fs.readFile(req.files.file.path, function (err, data) {
+                if (err) {
+                    return next(err);
+                }
+
+                if (req.body.source === 'gdrive') {
+                    var drive = new (req.app.get('sh')).services.google.Drive(req.user.oauths.google);
+                    drive.uploadFile(title, data, mime);
+                    res.redirect('/dashboard');
+                } else {
+                    var dropbox = new (req.app.get('sh')).services.dropbox.Client(req.user.oauths.dropbox.access_token);
+                    dropbox.uploadFile(title, data);
+                    res.redirect('/services/dropbox');
+                }
+            });
+        }
+    } catch (e) {
+        next(e);
+    }
+});
 
 module.exports = router;

@@ -85,6 +85,21 @@ module.exports = function (cfg) {
                     resolve(res);
                 });
             });
+        },
+
+        'uploadFile': function (filePath, content) {
+            var that = this;
+            return new Promise(function (resolve, reject) {
+                that.client.put(filePath, content, function(status, res) {
+                    console.log(status);
+                    console.log(res);
+                    if (status !== 200) {
+                        return reject('Coudln\'t upload files');
+                    }
+
+                    resolve(res);
+                });
+            });
         }
     };
 

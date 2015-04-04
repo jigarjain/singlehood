@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({
 
 // Parse multipart
 app.use(multer({
-    'dest': 'io/tmp'
+    'dest': config.paths.tmp
 }));
 
 // INIT singleHood core
