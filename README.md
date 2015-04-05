@@ -1,4 +1,4 @@
-# Grallo web services
+# SingleHood
 All cloud service under one hood
 
 ##Requirements
