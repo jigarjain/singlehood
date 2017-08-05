@@ -35,6 +35,6 @@ Make sure dev-dependencies are installed and run:
 
     npm test
 
-To test a single file, use [mocha](http://visionmedia.github.io/mocha/) directly. Ex -
+To test a single file, use [mocha](http://mochajs.org/) directly. Ex -
 
     mocha --harmony tests/users.js
